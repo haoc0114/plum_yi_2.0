@@ -4,6 +4,11 @@ from cnlunardate import cnlunardate
 import random
 import numpy as np
 import pandas as pd
+from google import genai
+# import google.generativeai as genai
+client = genai.Client(api_key="AIzaSyCyWbzK0sE1VZPkaEweGRatOpkE-fBKA_Q")
+gen_model="gemini-2.0-flash"
+
 
 # -----------------------------------------------------------
 tz = datetime.timezone(datetime.timedelta(hours=+8))   # 將時區固定在台灣
@@ -93,23 +98,42 @@ def gen_hexagram(x1, x2, x3):
                         '互卦': [Trigram_sign[m1]+Trigram[m1], Trigram_sign[m2]+Trigram[m2]],
                         '變卦': [Trigram_sign[x1n]+Trigram[x1n], Trigram_sign[x2n]+Trigram[x2n]]}, relation)
     # st.table(df2)
-    st.header('結果如下，貼到GPT並開啟搜尋及推理解卦')
+    # st.header('結果如下，貼到GPT並開啟搜尋及推理解卦')
     if rr == 1:
-        st.code('''你是一個精通梅花易數的占卜師，
+        input_prompt = '你是一個精通梅花易數的占卜師，會從本卦的卦意以及本卦的體用生剋關係去判斷當下，從互卦的卦意以及互卦的體用生剋關係去判斷過程，從變卦的卦意以及變卦的體用生剋關係去判斷結果，我想問的問題是'+question+'得到下面結果：'+'本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+'互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+'變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+'請幫我解卦'
+
+#         st.code('''你是一個精通梅花易數的占卜師，
+# 會從本卦的卦意以及本卦的體用生剋關係去判斷當下，
+# 從互卦的卦意以及互卦的體用生剋關係去判斷過程，
+# 從變卦的卦意以及變卦的體用生剋關係去判斷結果，\n'''+
+#                 '我想問的問題是'+question+'得到下面結果：\n'+
+#                 '本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+
+#                 '\n互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+
+#                 '\n變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+
+#                 '\n請幫我解卦')
+    else:
+        input_prompt = '你是一個精通梅花易數的占卜師，會從本卦的卦意以及本卦的體用生剋關係去判斷當下，從互卦的卦意以及互卦的體用生剋關係去判斷過程，從變卦的卦意以及變卦的體用生剋關係去判斷結果，我想問的問題是'+question+'得到下面結果：'+'本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+'互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+'變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+'請幫我解卦'
+        
+#         st.code('''你是一個精通梅花易數的占卜師，
+# 會從本卦的卦意以及本卦的體用生剋關係去判斷當下，
+# 從互卦的卦意以及互卦的體用生剋關係去判斷過程，
+# 從變卦的卦意以及變卦的體用生剋關係去判斷結果，\n'''+
+#                 '我想問的問題是'+question+'得到下面結果：\n'+
+#                 '本卦：'+Original_name+',其中體卦為'+Trigram[x2]+',用卦為'+Trigram[x1]+
+#                 '\n互卦：' +Mutual_name+',其中體卦為'+Trigram[m2]+',用卦為'+Trigram[m1]+
+#                 '\n變卦：'+Future_name+',其中體卦為'+Trigram[x2n]+',用卦為'+Trigram[x1n]+
+#                 '\n請幫我解卦')
+    response = client.models.generate_content(
+    model=gen_model,
+    contents=input_prompt)
+    st.write(response.text)
+
+    st.header('AI咒語如下，可貼到喜歡的AI解卦')
+    st.code('''你是一個精通梅花易數的占卜師，
 會從本卦的卦意以及本卦的體用生剋關係去判斷當下，
 從互卦的卦意以及互卦的體用生剋關係去判斷過程，
 從變卦的卦意以及變卦的體用生剋關係去判斷結果，\n'''+
                 '我想問的問題是'+question+'得到下面結果：\n'+
-                '本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+
-                '\n互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+
-                '\n變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+
-                '\n請幫我解卦')
-    else:
-        st.code('''你是一個精通梅花易數的占卜師，
-會從本卦的卦意以及本卦的體用生剋關係去判斷當下，
-從互卦的卦意以及互卦的體用生剋關係去判斷過程，
-從變卦的卦意以及變卦的體用生剋關係去判斷結果，\n'''+
-                '我想問的問題是'+question+'的吉凶得到下面結果：\n'+
                 '本卦：'+Original_name+',其中體卦為'+Trigram[x2]+',用卦為'+Trigram[x1]+
                 '\n互卦：' +Mutual_name+',其中體卦為'+Trigram[m2]+',用卦為'+Trigram[m1]+
                 '\n變卦：'+Future_name+',其中體卦為'+Trigram[x2n]+',用卦為'+Trigram[x1n]+
