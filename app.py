@@ -100,7 +100,7 @@ def gen_hexagram(x1, x2, x3):
     # st.table(df2)
     # st.header('結果如下，貼到GPT並開啟搜尋及推理解卦')
     if rr == 1:
-        input_prompt = '你是一個精通梅花易數的占卜師，會從本卦的卦意以及本卦的體用生剋關係去判斷當下，從互卦的卦意以及互卦的體用生剋關係去判斷過程，從變卦的卦意以及變卦的體用生剋關係去判斷結果，我想問的問題是'+question+'得到下面結果：'+'本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+'互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+'變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+'請幫我解卦'
+        input_prompt = '你是一個精通梅花易數的占卜師，會從本卦的卦意並參考本卦的體用生剋關係去判斷當下，從互卦的卦意並參考互卦的體用生剋關係去判斷過程，從變卦的卦意並參考變卦的體用生剋關係去判斷結果，我想問的問題是'+question+'得到下面結果：'+'本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+'互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+'變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+'請幫我解卦'
 
 #         st.code('''你是一個精通梅花易數的占卜師，
 # 會從本卦的卦意以及本卦的體用生剋關係去判斷當下，
@@ -112,7 +112,7 @@ def gen_hexagram(x1, x2, x3):
 #                 '\n變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+
 #                 '\n請幫我解卦')
     else:
-        input_prompt = '你是一個精通梅花易數的占卜師，會從本卦的卦意以及本卦的體用生剋關係去判斷當下，從互卦的卦意以及互卦的體用生剋關係去判斷過程，從變卦的卦意以及變卦的體用生剋關係去判斷結果，我想問的問題是'+question+'得到下面結果：'+'本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+'互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+'變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+'請幫我解卦'
+        input_prompt = '你是一個精通梅花易數的占卜師，會從本卦的卦意並參考本卦的體用生剋關係去判斷當下，從互卦的卦意並參考互卦的體用生剋關係去判斷過程，從變卦的卦意並參考變卦的體用生剋關係去判斷結果，我想問的問題是'+question+'得到下面結果：'+'本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+'互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+'變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+'請幫我解卦'
         
 #         st.code('''你是一個精通梅花易數的占卜師，
 # 會從本卦的卦意以及本卦的體用生剋關係去判斷當下，
@@ -128,18 +128,19 @@ def gen_hexagram(x1, x2, x3):
     contents=input_prompt)
     st.write(response.text)
 
+    st.markdown(link_1+';   '+link_3+';   '+link_2, unsafe_allow_html=True)
+    st.table(df2)
     st.header('AI咒語如下，可貼到喜歡的AI解卦')
     st.code('''你是一個精通梅花易數的占卜師，
-會從本卦的卦意以及本卦的體用生剋關係去判斷當下，
-從互卦的卦意以及互卦的體用生剋關係去判斷過程，
-從變卦的卦意以及變卦的體用生剋關係去判斷結果，\n'''+
+會從本卦的卦意並參考本卦的體用生剋關係去判斷當下，
+從互卦的卦意並參考互卦的體用生剋關係去判斷過程，
+從變卦的卦意並參考變卦的體用生剋關係去判斷結果，\n'''+
                 '我想問的問題是'+question+'得到下面結果：\n'+
                 '本卦：'+Original_name+',其中體卦為'+Trigram[x2]+',用卦為'+Trigram[x1]+
                 '\n互卦：' +Mutual_name+',其中體卦為'+Trigram[m2]+',用卦為'+Trigram[m1]+
                 '\n變卦：'+Future_name+',其中體卦為'+Trigram[x2n]+',用卦為'+Trigram[x1n]+
                 '\n請幫我解卦')
-    st.markdown(link_1+';   '+link_3+';   '+link_2, unsafe_allow_html=True)
-    st.table(df2)
+    
 
 st.title('梅花易數占卜')
 date_now = datetime.datetime.now(tz)
