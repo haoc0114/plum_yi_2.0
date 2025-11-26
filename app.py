@@ -6,9 +6,15 @@ import numpy as np
 import pandas as pd
 from google import genai
 # import google.generativeai as genai
-client = genai.Client(api_key="AIzaSyCyWbzK0sE1VZPkaEweGRatOpkE-fBKA_Q")
 gen_model="gemini-2.0-flash"
 
+try:
+    api_key = st.secrets["GOOGLE_API_KEY"]
+except FileNotFoundError:
+    st.error("找不到 API Key，請檢查 secrets 設定。")
+    st.stop()
+
+client = genai.Client(api_key=api_key)
 
 # -----------------------------------------------------------
 tz = datetime.timezone(datetime.timedelta(hours=+8))   # 將時區固定在台灣
@@ -100,7 +106,7 @@ def gen_hexagram(x1, x2, x3):
     # st.table(df2)
     # st.header('結果如下，貼到GPT並開啟搜尋及推理解卦')
     if rr == 1:
-        input_prompt = '你是一個精通梅花易數的占卜師，會從本卦的卦意並參考本卦的體用生剋及卦象關係去判斷當下，從互卦的卦意並參考互卦的體用生剋及卦象關係去判斷過程，從變卦的卦意並參考變卦的體用生剋及卦象關係去判斷結果，我想問的問題是'+question+'得到下面結果：'+'本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+'互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+'變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+'請認真查證卦意、體用生剋關係及卦象關係後幫我解卦'
+        input_prompt = '你是一個精通梅花易數的占卜師，會從本卦的卦意並參考本卦的體卦和用卦的生剋及卦象關係去判斷當下，從互卦的卦意並參考互卦的體卦和用卦的生剋及卦象關係去判斷過程，從變卦的卦意並參考變卦的體卦和用卦的生剋及卦象關係去判斷結果，我想問的問題是'+question+'得到下面結果：'+'本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+'互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+'變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+'請認真查證卦意、體卦和用卦的生剋關係及卦象關係後幫我解卦'
 
 #         st.code('''你是一個精通梅花易數的占卜師，
 # 會從本卦的卦意以及本卦的體用生剋關係去判斷當下，
@@ -112,7 +118,7 @@ def gen_hexagram(x1, x2, x3):
 #                 '\n變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+
 #                 '\n請幫我解卦')
     else:
-        input_prompt = '你是一個精通梅花易數的占卜師，會從本卦的卦意並參考本卦的體用生剋及卦象關係去判斷當下，從互卦的卦意並參考互卦的體用生剋及卦象關係去判斷過程，從變卦的卦意並參考變卦的體用生剋及卦象關係去判斷結果，我想問的問題是'+question+'得到下面結果：'+'本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+'互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+'變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+'請認真查證卦意、體用生剋關係及卦象關係後幫我解卦'
+        input_prompt = '你是一個精通梅花易數的占卜師，會從本卦的卦意並參考本卦的體卦和用卦的生剋及卦象關係去判斷當下，從互卦的卦意並參考互卦的體卦和用卦的生剋及卦象關係去判斷過程，從變卦的卦意並參考變卦的體卦和用卦的生剋及卦象關係去判斷結果，我想問的問題是'+question+'得到下面結果：'+'本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+'互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+'變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+'請認真查證卦意、體卦和用卦的生剋關係及卦象關係後幫我解卦'
         
 #         st.code('''你是一個精通梅花易數的占卜師，
 # 會從本卦的卦意以及本卦的體用生剋關係去判斷當下，
