@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from google import genai
 # import google.generativeai as genai
-gen_model="gemini-2.0-flash"
+gen_model="gemini-2.5-flash"
 
 try:
     api_key = st.secrets["GOOGLE_API_KEY"]
