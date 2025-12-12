@@ -106,52 +106,63 @@ def gen_hexagram(x1, x2, x3):
     else:
         input_prompt = '你是一個精通梅花易數的占卜師，會從本卦的卦意並參考本卦的體卦和用卦的生剋及卦象關係去判斷當下，從互卦的卦意並參考互卦的體卦和用卦的生剋及卦象關係去判斷過程，從變卦的卦意並參考變卦的體卦和用卦的生剋及卦象關係去判斷結果，我想問的問題是'+question+'得到下面結果：'+'本卦：'+Original_name+',其中體卦為'+Trigram[x2]+',用卦為'+Trigram[x1]+',互卦：' +Mutual_name+',其中體卦為'+Trigram[m2]+',用卦為'+Trigram[m1]+',變卦：'+Future_name+',其中體卦為'+Trigram[x2n]+',用卦為'+Trigram[x1n]+'請認真查證卦意、體卦和用卦的生剋關係及卦象關係後幫我解卦'
         
-    
-    message_placeholder = st.empty()
-    message_placeholder.text("⚡ 正在與天地連線解卦中，請稍候...")
+    if AI_exp == 'AI解卦':
+        message_placeholder = st.empty()
+        message_placeholder.text("⚡ 正在與天地連線解卦中，請稍候...")
 
-    try:
-        response = client.models.generate_content_stream(
-        model=gen_model,
-        contents=input_prompt)
+        try:
+            response = client.models.generate_content_stream(
+            model=gen_model,
+            contents=input_prompt)
 
-        def stream_parser(response):
-            for chunk in response:
-                # Google API 有時會回傳空或是被擋下的內容，需做檢查
-                if chunk.text:
-                    yield chunk.text
-        message_placeholder.write_stream(stream_parser(response))
-    
-        # st.write(response.text)
+            def stream_parser(response):
+                for chunk in response:
+                    # Google API 有時會回傳空或是被擋下的內容，需做檢查
+                    if chunk.text:
+                        yield chunk.text
+            message_placeholder.write_stream(stream_parser(response))
+        
+            # st.write(response.text)
 
+            st.markdown(link_1+';   '+link_3+';   '+link_2, unsafe_allow_html=True)
+            st.table(df2)
+            st.header('AI咒語如下，可貼到喜歡的AI解卦')
+            if rr == 1:
+                st.code(input_prompt)
+            #     st.code('''1你是一個精通梅花易數的占卜師，
+            # 會從本卦的卦意並參考本卦的體用生剋及卦象關係去判斷當下，
+            # 從互卦的卦意並參考互卦的體用生剋及卦象關係去判斷過程，
+            # 從變卦的卦意並參考變卦的體用生剋及卦象關係去判斷結果，\n'''+
+            #                 '我想問的問題是'+question+'得到下面結果：\n'+
+            #                 '本卦：'+Original_name+',其中體卦為'+Trigram[x2]+',用卦為'+Trigram[x1]+
+            #                 '\n互卦：' +Mutual_name+',其中體卦為'+Trigram[m2]+',用卦為'+Trigram[m1]+
+            #                 '\n變卦：'+Future_name+',其中體卦為'+Trigram[x2n]+',用卦為'+Trigram[x1n]+
+            #                 '\n請認真查證卦意、體用生剋關係及卦象關係後幫我解卦')
+            else:
+                st.code(input_prompt)
+            #     st.code('''2你是一個精通梅花易數的占卜師，
+            # 會從本卦的卦意並參考本卦的體用生剋及卦象關係去判斷當下，
+            # 從互卦的卦意並參考互卦的體用生剋及卦象關係去判斷過程，
+            # 從變卦的卦意並參考變卦的體用生剋及卦象關係去判斷結果，\n'''+
+            #                 '我想問的問題是'+question+'得到下面結果：\n'+
+            #                 '本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+
+            #                 '\n互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+
+            #                 '\n變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+
+            #                 '\n請認真查證卦意、體用生剋關係及卦象關係後幫我解卦')
+            
+        except Exception as e:
+            message_placeholder.error(f"連線發生錯誤：{e}")
+    else:
+        st.header('本卦為第'+str(Original)+'卦'+Original_sign+Original_name)
+        st.header('互卦為第'+str(Mutual)+'卦'+Mutual_sign+Mutual_name)
+        st.header('變卦為第'+str(Future)+'卦'+Future_sign+Future_name)
         st.markdown(link_1+';   '+link_3+';   '+link_2, unsafe_allow_html=True)
         st.table(df2)
         st.header('AI咒語如下，可貼到喜歡的AI解卦')
         if rr == 1:
             st.code(input_prompt)
-        #     st.code('''1你是一個精通梅花易數的占卜師，
-        # 會從本卦的卦意並參考本卦的體用生剋及卦象關係去判斷當下，
-        # 從互卦的卦意並參考互卦的體用生剋及卦象關係去判斷過程，
-        # 從變卦的卦意並參考變卦的體用生剋及卦象關係去判斷結果，\n'''+
-        #                 '我想問的問題是'+question+'得到下面結果：\n'+
-        #                 '本卦：'+Original_name+',其中體卦為'+Trigram[x2]+',用卦為'+Trigram[x1]+
-        #                 '\n互卦：' +Mutual_name+',其中體卦為'+Trigram[m2]+',用卦為'+Trigram[m1]+
-        #                 '\n變卦：'+Future_name+',其中體卦為'+Trigram[x2n]+',用卦為'+Trigram[x1n]+
-        #                 '\n請認真查證卦意、體用生剋關係及卦象關係後幫我解卦')
         else:
             st.code(input_prompt)
-        #     st.code('''2你是一個精通梅花易數的占卜師，
-        # 會從本卦的卦意並參考本卦的體用生剋及卦象關係去判斷當下，
-        # 從互卦的卦意並參考互卦的體用生剋及卦象關係去判斷過程，
-        # 從變卦的卦意並參考變卦的體用生剋及卦象關係去判斷結果，\n'''+
-        #                 '我想問的問題是'+question+'得到下面結果：\n'+
-        #                 '本卦：'+Original_name+',其中體卦為'+Trigram[x1]+',用卦為'+Trigram[x2]+
-        #                 '\n互卦：' +Mutual_name+',其中體卦為'+Trigram[m1]+',用卦為'+Trigram[m2]+
-        #                 '\n變卦：'+Future_name+',其中體卦為'+Trigram[x1n]+',用卦為'+Trigram[x2n]+
-        #                 '\n請認真查證卦意、體用生剋關係及卦象關係後幫我解卦')
-        
-    except Exception as e:
-        message_placeholder.error(f"連線發生錯誤：{e}")
     
 
 st.title('梅花易數占卜')
@@ -171,7 +182,7 @@ st.text(Stems[y1]+Branches[y2] + '年' + str(month_l) +'月'+str(day_l)+'號' + 
 st.header('不誠不占，不義不占，不疑不占')
 question = st.text_input("請輸入想卜的事，寫詳細一點:")
 method = st.selectbox('請選擇起卦方式，連續占卜不要用時間起卦', ['依當下時間起卦', '亂數起卦', '輸入數字起卦'])
-
+AI_exp = st.radio('', ['AI解卦', '僅取卦'])
 
 if method == '依當下時間起卦':
     s1 = (y2+month_l+day_l) % 8
@@ -228,3 +239,4 @@ else:
                 down_sign = Trigram[s2]
                 alt = str(s3)
                 gen_hexagram(s1, s2, s3)
+
